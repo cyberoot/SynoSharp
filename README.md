@@ -1,3 +1,7 @@
+---
+published: false
+---
+
 SynoSharp
 =========
 
@@ -23,15 +27,20 @@ var taskList = from task in ds.List().Data.Tasks select task;
 synods Download Station CLI interface
 ---------
 
-List all tasks with status downloading or waiting, include trasnfer info
-		synods list -s downloading waiting -a transfer
-
+List all tasks with status downloading or waiting, include transfer info
+```bat
+synods list -s downloading waiting -a transfer
+```
 Upload .torrent file to create new download task
-		synods new --file SomeStuff.torrent
+```bat
+synods new --file SomeStuff.torrent
+```
 
 Create download task from URL
-		synods new --url http://download.some/stuff.zip
-
+```bat
+synods new --url http://download.some/stuff.zip
+```
 Pause download task
-		synods pause --id dbid_2420
-
+```bat
+synods pause --id dbid_2420
+```
