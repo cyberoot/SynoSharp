@@ -112,7 +112,7 @@ namespace SynologyAPI
             {
                 request.Append("&" + String.Join("&", reqParams));
             }
-            if (_reqData["sid"] != String.Empty)
+            if (!String.IsNullOrWhiteSpace(_reqData["sid"]))
             {
                 request.Append("&_sid=" + _reqData["sid"]);
             }

@@ -10,6 +10,7 @@ using StdUtils;
 using CommandLine;
 using System.Collections.Specialized;
 using System.Configuration;
+using System.IO;
 
 namespace synods
 {
@@ -72,11 +73,87 @@ namespace synods
                         ds.Logout();
                     }
                     break;
+                case ("new"):
+                    var newOptions = (NewOptions)invokedVerbInstance;
+                    if (ds.Login())
+                    {
+                        TResult<Object> taskResult = null;
+                        if (!String.IsNullOrWhiteSpace(newOptions.Filename))
+                        {
+                            taskResult = ds.CreateTask(Path.GetFileName(newOptions.Filename), new FileStream(newOptions.Filename, FileMode.Open, FileAccess.Read));
+                        }
+                        if (!String.IsNullOrWhiteSpace(newOptions.Uri))
+                        {
+                            taskResult = ds.CreateTask(newOptions.Uri);
+                        }
+                        if (!taskResult.Success)
+                        {
+                            Console.WriteLine("Failed uploading {0} (((", newOptions.Filename);
+                        }
+                        ds.Logout();
+                    }
+                    break;
+                case ("delete"):
+                    var deleteOptions = (TaskDeleteOptions)invokedVerbInstance;
+                    if (ds.Login())
+                    {
+                        if (deleteOptions.Id.Count() > 0)
+                        {
+                            var taskResult = ds.DeleteTasks(deleteOptions.Id, deleteOptions.Force);
+                            if (taskResult.Success)
+                            {
+                                foreach (var taskError in taskResult.Data)
+                                {
+                                    Console.WriteLine(ObjectUtils.HumanReadable(taskError));
+                                    Console.WriteLine();
+                                }
+                            }
+                        }
+                        ds.Logout();
+                    }
+                    break;
+                case ("pause"):
+                    var pauseOptions = (TaskPauseOptions)invokedVerbInstance;
+                    if (ds.Login())
+                    {
+                        if (pauseOptions.Id.Count() > 0)
+                        {
+                            var taskResult = ds.PauseTasks(pauseOptions.Id);
+                            if (taskResult.Success)
+                            {
+                                foreach (var taskError in taskResult.Data)
+                                {
+                                    Console.WriteLine(ObjectUtils.HumanReadable(taskError));
+                                    Console.WriteLine();
+                                }
+                            }
+                        }
+                        ds.Logout();
+                    }
+                    break;
+                case ("resume"):
+                    var resumeOptions = (TaskResumeOptions)invokedVerbInstance;
+                    if (ds.Login())
+                    {
+                        if (resumeOptions.Id.Count() > 0)
+                        {
+                            var taskResult = ds.ResumeTasks(resumeOptions.Id);
+                            if (taskResult.Success)
+                            {
+                                foreach (var taskError in taskResult.Data)
+                                {
+                                    Console.WriteLine(ObjectUtils.HumanReadable(taskError));
+                                    Console.WriteLine();
+                                }
+                            }
+                        }
+                        ds.Logout();
+                    }
+                    break;
                 default:
                     break;
             }
-
-            Console.ReadLine();
+            // Console.ReadLine();
         }
 
 

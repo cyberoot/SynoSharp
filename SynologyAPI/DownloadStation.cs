@@ -61,6 +61,52 @@ namespace SynologyAPI
            );
         }
 
+        public TaskOperationResult PauseTasks(string[] taskIds)
+        {
+            return PauseTasks(String.Join(",", taskIds));
+        }
+
+        public TaskOperationResult PauseTasks(string taskIds)
+        {
+            return CallMethod<TaskOperationResult>("SYNO.DownloadStation.Task",
+                "pause", new ReqParams()
+                    {
+                        {"id", taskIds},
+                    }
+            );
+        }
+
+        public TaskOperationResult ResumeTasks(string[] taskIds)
+        {
+            return ResumeTasks(String.Join(",", taskIds));
+        }
+
+        public TaskOperationResult ResumeTasks(string taskIds)
+        {
+            return CallMethod<TaskOperationResult>("SYNO.DownloadStation.Task",
+                "resume", new ReqParams()
+                    {
+                        {"id", taskIds},
+                    }
+            );
+        }
+
+        public TaskOperationResult DeleteTasks(string[] taskIds, bool forceComplete = false)
+        {
+            return DeleteTasks(String.Join(",", taskIds), forceComplete);
+        }
+
+        public TaskOperationResult DeleteTasks(string taskIds, bool forceComplete = false)
+        {
+            return CallMethod<TaskOperationResult>("SYNO.DownloadStation.Task",
+                "delete", new ReqParams()
+                    {
+                        {"id", taskIds},
+                        {"force_complete", forceComplete == null ? "false" : forceComplete.ToString().ToLower()}
+                    }
+            );
+        }
+
         public ListResult GetTasks(string[] taskIds, string[] additional)
         {
             return GetTasks(String.Join(",", taskIds), String.Join(",", additional));
