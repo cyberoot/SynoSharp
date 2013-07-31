@@ -21,14 +21,14 @@ namespace synods
             string invokedVerb = "";
             object invokedVerbInstance = null;
             var options = new Options();
-            if (!CommandLine.Parser.Default.ParseArguments(args, options,
+            if (!Parser.Default.ParseArguments(args, options,
                                         (verb, subOptions) =>
                                         {
                                             invokedVerb = verb;
                                             invokedVerbInstance = subOptions;
                                         }))
             {
-                Environment.Exit(CommandLine.Parser.DefaultExitCodeFail);
+                Environment.Exit(Parser.DefaultExitCodeFail);
             }
             NameValueCollection appSettings = ConfigurationManager.AppSettings;
             var ds = new DownloadStation(new Uri(appSettings["host"]), appSettings["username"], appSettings["password"], CreateProxy(appSettings["proxy"]));
@@ -42,7 +42,7 @@ namespace synods
                         if (listResult.Success)
                         {
                             var taskList = from task in listResult.Data.Tasks select task;
-                            if (listOptions.Status.Count() > 0)
+                            if (listOptions.Status.Any())
                             {
                                 var statusesToList = new List<string>(listOptions.Status);
                                 taskList = from task in taskList where statusesToList.Contains(task.Status) select task;
@@ -86,7 +86,7 @@ namespace synods
                         {
                             taskResult = ds.CreateTask(newOptions.Uri);
                         }
-                        if (!taskResult.Success)
+                        if (taskResult != null && !taskResult.Success)
                         {
                             Console.WriteLine("Failed uploading {0} (((", newOptions.Filename);
                         }
@@ -97,7 +97,7 @@ namespace synods
                     var deleteOptions = (TaskDeleteOptions)invokedVerbInstance;
                     if (ds.Login())
                     {
-                        if (deleteOptions.Id.Count() > 0)
+                        if (deleteOptions.Id.Any())
                         {
                             var taskResult = ds.DeleteTasks(deleteOptions.Id, deleteOptions.Force);
                             if (taskResult.Success)
@@ -116,7 +116,7 @@ namespace synods
                     var pauseOptions = (TaskPauseOptions)invokedVerbInstance;
                     if (ds.Login())
                     {
-                        if (pauseOptions.Id.Count() > 0)
+                        if (pauseOptions.Id.Any())
                         {
                             var taskResult = ds.PauseTasks(pauseOptions.Id);
                             if (taskResult.Success)
@@ -135,7 +135,7 @@ namespace synods
                     var resumeOptions = (TaskResumeOptions)invokedVerbInstance;
                     if (ds.Login())
                     {
-                        if (resumeOptions.Id.Count() > 0)
+                        if (resumeOptions.Id.Any())
                         {
                             var taskResult = ds.ResumeTasks(resumeOptions.Id);
                             if (taskResult.Success)
@@ -153,7 +153,7 @@ namespace synods
                 default:
                     break;
             }
-            // Console.ReadLine();
+            Console.ReadLine();
         }
 
 

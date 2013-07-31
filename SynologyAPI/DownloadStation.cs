@@ -69,8 +69,8 @@ namespace SynologyAPI
         public TaskOperationResult PauseTasks(string taskIds)
         {
             return CallMethod<TaskOperationResult>("SYNO.DownloadStation.Task",
-                "pause", new ReqParams()
-                    {
+                "pause", new ReqParams
+                {
                         {"id", taskIds},
                     }
             );
@@ -84,8 +84,8 @@ namespace SynologyAPI
         public TaskOperationResult ResumeTasks(string taskIds)
         {
             return CallMethod<TaskOperationResult>("SYNO.DownloadStation.Task",
-                "resume", new ReqParams()
-                    {
+                "resume", new ReqParams
+                {
                         {"id", taskIds},
                     }
             );
@@ -99,8 +99,8 @@ namespace SynologyAPI
         public TaskOperationResult DeleteTasks(string taskIds, bool forceComplete = false)
         {
             return CallMethod<TaskOperationResult>("SYNO.DownloadStation.Task",
-                "delete", new ReqParams()
-                    {
+                "delete", new ReqParams
+                {
                         {"id", taskIds},
                         {"force_complete", forceComplete == null ? "false" : forceComplete.ToString().ToLower()}
                     }
@@ -115,25 +115,25 @@ namespace SynologyAPI
         public ListResult GetTasks(string taskIds, string additional = "detail")
         {
             return CallMethod<ListResult>("SYNO.DownloadStation.Task",
-                "getinfo", new ReqParams()
-                    {
+                "getinfo", new ReqParams
+                {
                         {"id", taskIds},
                         {"additional", additional}
                     }
             );
         }
 
-        public SynologyRestDAL.TResult<Object> CreateTask(string url)
+        public TResult<Object> CreateTask(string url)
         {
             return CallMethod<TResult<Object>>("SYNO.DownloadStation.Task",
-                "create", new ReqParams() 
+                "create", new ReqParams
                 {
                     {"uri", url}
                 }
             );
         }
 
-        public SynologyRestDAL.TResult<Object> CreateTask(string fileName, Stream fileStream)
+        public TResult<Object> CreateTask(string fileName, Stream fileStream)
         {
             return PostFile<TResult<Object>>("SYNO.DownloadStation.Task", "create", fileName, fileStream);
         }
