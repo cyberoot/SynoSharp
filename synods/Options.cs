@@ -91,10 +91,19 @@ namespace synods
         [HelpOption]
         public string GetUsage()
         {
-            var usage = new StringBuilder();
-            usage.AppendLine("SynoSharp CLI / Under construction");
-            return usage.ToString();
+            return HelpText.AutoBuild(this, (HelpText current) => HelpText.DefaultParsingErrorsHandler(this, current));
         }
+
+        [HelpVerbOption]
+        public string GetUsage(string verb)
+        {
+            if (verb == null)
+            {
+                return GetUsage();
+            }
+            return HelpText.AutoBuild(this, verb);
+        }
+
     }
 
 }

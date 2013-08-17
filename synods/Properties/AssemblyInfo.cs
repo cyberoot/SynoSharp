@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("cyberoot")]
 [assembly: AssemblyProduct("synods")]
-[assembly: AssemblyCopyright("Copyright © cyberoot 2013")]
+[assembly: AssemblyCopyright("Copyright (c) cyberoot 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

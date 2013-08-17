@@ -153,7 +153,7 @@ namespace synods
                 default:
                     break;
             }
-            Console.ReadLine();
+            //Console.ReadLine();
         }
 
 
