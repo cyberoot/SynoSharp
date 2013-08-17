@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SynologyRestDAL", "Synology
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StdUtils", "StdUtils\StdUtils.csproj", "{C4E83987-6223-46F2-B437-9C677B8A9E2B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLine", "C:\cygwin\home\pspesivt\repos\commandline\src\libcmdline\CommandLine.csproj", "{5DEA2811-2FFA-4959-830B-CAD3ACACABEB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLine", "CommandLine\src\libcmdline\CommandLine.csproj", "{5DEA2811-2FFA-4959-830B-CAD3ACACABEB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -51,6 +51,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CommandLine\src\libcmdline\CommandLine.csproj">
+      <Project>{5dea2811-2ffa-4959-830b-cad3acacabeb}</Project>
+      <Name>CommandLine</Name>
+    </ProjectReference>
     <ProjectReference Include="..\StdUtils\StdUtils.csproj">
       <Project>{c4e83987-6223-46f2-b437-9c677b8a9e2b}</Project>
       <Name>StdUtils</Name>
@@ -62,10 +66,6 @@
     <ProjectReference Include="..\SynologyRestDAL\SynologyRestDAL.csproj">
       <Project>{893c1997-87ca-49e2-b277-b75607134574}</Project>
       <Name>SynologyRestDAL</Name>
-    </ProjectReference>
-    <ProjectReference Include="C:\cygwin\home\pspesivt\repos\commandline\src\libcmdline\CommandLine.csproj">
-      <Project>{5dea2811-2ffa-4959-830b-cad3acacabeb}</Project>
-      <Name>CommandLine</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
