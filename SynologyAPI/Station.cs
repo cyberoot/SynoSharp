@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -24,13 +25,9 @@ namespace SynologyAPI
         protected WebProxy Proxy;
         protected ApiInfo ApiInfo;
 
-        protected virtual string[] ImplementedApi
-        {
-            get
-            {
-                return new[] { "SYNO.API.Auth" };
-            }
-        }
+        protected Dictionary<string, int> _implementedApi;
+
+        protected Dictionary<string,int> ImplementedApi { get { return GetImplementedApi(); }}
 
         public Station()
         {
@@ -54,6 +51,11 @@ namespace SynologyAPI
             Username = username;
             Password = password;
             InternalSession = "DownloadStation";
+        }
+
+        protected virtual Dictionary<string, int> GetImplementedApi()
+        {
+            return _implementedApi ?? (_implementedApi = new Dictionary<string, int>() { { "SYNO.API.Auth", 3 } });
         }
 
         public Station(Uri url, string username, string password, WebProxy proxy)
@@ -135,7 +137,7 @@ namespace SynologyAPI
                 ApiInfo = JsonHelper.FromJson<ApiInfo>(_run(
                     (new RequestBuilder()).
                         Api("SYNO.API.Info").
-                        AddParam("query", String.Join(",", ImplementedApi))
+                        AddParam("query", String.Join(",", ImplementedApi.Select(k => k.Key)))
                    )
                 );
             }
@@ -168,20 +170,49 @@ namespace SynologyAPI
 
         protected string _postFile(RequestBuilder requestBuilder, string fileName, Stream fileStream, string fileParam = "file")
         {
+            //CreateDownloadTaskFromFile(fileName, requestBuilder);
+            
+            // return null;
+
             HttpContent fileStreamContent = new StreamContent(fileStream);
             var requestHandler = new HttpClientHandler();
             if (Proxy != null)
             {
                 requestHandler.Proxy = Proxy;
             }
-            string requestUri = BaseUrl.ToString() + requestBuilder;
+
+            string requestUri = BaseUrl.ToString() + requestBuilder.WebApi();
+
             System.IO.Stream result = null;
             string resJson = String.Empty;
+
+            var boundary = String.Format("----------{0:N}", Guid.NewGuid());
+
             using (var client = new HttpClient(requestHandler))
             {
-                using (var formData = new MultipartFormDataContent())
+                using (var formData = new MultipartFormDataContent(boundary))
                 {
+                    foreach (var param in requestBuilder.CallParams)
+                    {
+                        var c = new StringContent(param.Key == "version" ? "1" : param.Value);
+                        c.Headers.Remove("Content-Type");
+                        formData.Add(c, "\"" + param.Key + "\"");
+                    }
+
+                    // This fucking workzzz!!!
+                    // new MediaTypeHeaderValue("application/octet-stream");
+                    fileStreamContent.Headers.Remove("Content-Disposition");
+                    fileStreamContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data") { FileName = "\"" + fileName + "\"", Name = "\"file\"" };
+                    fileStreamContent.Headers.Remove("Content-Type");
+                    fileStreamContent.Headers.TryAddWithoutValidation("Content-Type", "application/octet-stream");
+
                     formData.Add(fileStreamContent, fileParam, fileName);
+
+                    formData.Headers.Remove("Content-Type");
+
+                    formData.Headers.TryAddWithoutValidation("Content-Type", "multipart/form-data; boundary=" + boundary);
+
+
                     var response = client.PostAsync(requestUri, formData).Result;
                     if (response.IsSuccessStatusCode)
                     {
@@ -194,6 +225,25 @@ namespace SynologyAPI
                 resJson = reader.ReadToEnd();
             }
             return resJson;
+        }
+
+        /// <summary>
+        /// Converts the contents of file into byte buffer.
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public static byte[] ConvertFileToByteArray(string fileName)
+        {
+            byte[] returnValue = null;
+
+            using (FileStream fr = new FileStream(fileName, FileMode.Open))
+            {
+                using (BinaryReader br = new BinaryReader(fr))
+                {
+                    returnValue = br.ReadBytes((int)fr.Length);
+                }
+            }
+            return returnValue;
         }
 
     }

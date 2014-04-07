@@ -28,8 +28,10 @@ namespace synods
                                             invokedVerbInstance = subOptions;
                                         }))
             {
+                Console.ReadLine();
                 Environment.Exit(Parser.DefaultExitCodeFail);
             }
+
             NameValueCollection appSettings = ConfigurationManager.AppSettings;
             var ds = new DownloadStation(new Uri(appSettings["host"]), appSettings["username"], appSettings["password"], CreateProxy(appSettings["proxy"]));
             switch(invokedVerb)
@@ -80,7 +82,8 @@ namespace synods
                         TResult<Object> taskResult = null;
                         if (!String.IsNullOrWhiteSpace(newOptions.Filename))
                         {
-                            taskResult = ds.CreateTask(Path.GetFileName(newOptions.Filename), new FileStream(newOptions.Filename, FileMode.Open, FileAccess.Read));
+                            taskResult = ds.CreateTask(Path.GetFileName(newOptions.Filename), new FileStream(newOptions.Filename, FileMode.Open, FileAccess.Read, FileShare.Read));
+                            // taskResult = ds.CreateTask(Path.GetFileName(newOptions.Filename), null);
                         }
                         if (!String.IsNullOrWhiteSpace(newOptions.Uri))
                         {
@@ -153,7 +156,7 @@ namespace synods
                 default:
                     break;
             }
-            //Console.ReadLine();
+            Console.ReadLine();
         }
 
 

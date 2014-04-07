@@ -12,17 +12,14 @@ namespace SynologyAPI
 {
     public sealed class DownloadStation : Station
     {
-        protected override string[] ImplementedApi
-        {
-            get
-            {
-                return new[] { "SYNO.API.Auth", "SYNO.DownloadStation.Task", "SYNO.DownloadStation.Info" };
-            }
-        }
-
         public DownloadStation()
             : base()
         {}
+
+        protected override Dictionary<string, int> GetImplementedApi()
+        {
+            return _implementedApi ?? (_implementedApi = new Dictionary<string, int>() { { "SYNO.API.Auth", 3 }, { "SYNO.DownloadStation.Task", 1 }, { "SYNO.DownloadStation.Info", 1 } });
+        }
 
         public DownloadStation(Uri url, string username, string password, WebProxy proxy)
             : base(url, username, password, proxy)

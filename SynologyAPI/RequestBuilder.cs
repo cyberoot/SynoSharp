@@ -8,25 +8,32 @@ namespace SynologyAPI
 {
     public class ReqParams : Dictionary<string, string>
     {
-        
+
     }
 
     public class RequestBuilder
     {
         private ReqParams _reqData = new ReqParams()
-            {
-                {"api", "SYNO.API.Info"},
-                {"cgiPath", "query.cgi"},
-                {"version", "1"},
-                {"method", "query"},
-                {"sid", String.Empty}
-            };
+        {
+            { "api", "SYNO.API.Info" },
+            { "cgiPath", "query.cgi" },
+            { "version", "1" },
+            { "method", "query" },
+            { "sid", String.Empty }
+        };
+
         private ReqParams _params = new ReqParams();
 
         private readonly string[] _headBuildOrder = { "api", "version", "method" };
 
+        public ReqParams ApiParams
+        {
+            get { return _reqData; }
+        }
+
         public RequestBuilder()
-        {}
+        {
+        }
 
         public RequestBuilder(string sessionId)
             : this()
@@ -94,20 +101,35 @@ namespace SynologyAPI
             return _build();
         }
 
+        public string WebApi()
+        {
+            return String.Format("{0}{1}", "webapi", _reqData["cgiPath"] != String.Empty ? "/" + _reqData["cgiPath"] : "");
+        }
+
+        public IDictionary<string, string> CallParams
+        {
+            get
+            {
+                return _reqData.Where(k => k.Key != "cgiPath").OrderBy(k => k.Key == "sid" ? -1 : _headBuildOrder.ToList().IndexOf(k.Key)).ToDictionary(k => k.Key == "sid" ? "_sid" : k.Key, v => v.Value);
+            }
+        }
+
         private string _build()
         {
             var request = new StringBuilder();
-            request.Append("webapi");
-            if (_reqData["cgiPath"] != String.Empty)
+
+            request.Append(WebApi());
+
+            var reqHead = (from s in _headBuildOrder where _reqData[s] != String.Empty select s + "=" + System.Web.HttpUtility.UrlEncode(_reqData[s])).ToList();
+            var reqParams = _params.Select(param => param.Key + "=" + param.Value).ToList();
+            if (reqHead.Any() || reqParams.Any())
             {
-                request.Append("/" + _reqData["cgiPath"] + "?");
+                request.Append("?");
             }
-            var reqHead = (from s in _headBuildOrder where _reqData[s] != String.Empty select s + "=" + _reqData[s]).ToList();
             if (reqHead.Any())
             {
                 request.Append(String.Join("&", reqHead));
             }
-            var reqParams = _params.Select(param => param.Key + "=" + param.Value).ToList();
             if (reqParams.Any())
             {
                 request.Append("&" + String.Join("&", reqParams));
