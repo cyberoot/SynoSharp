@@ -18,7 +18,7 @@ namespace SynologyAPI
 
         protected override Dictionary<string, int> GetImplementedApi()
         {
-            return _implementedApi ?? (_implementedApi = new Dictionary<string, int>() { { "SYNO.API.Auth", 3 }, { "SYNO.DownloadStation.Task", 1 }, { "SYNO.DownloadStation.Info", 1 } });
+            return _implementedApi ?? (_implementedApi = new Dictionary<string, int>() { { "SYNO.API.Auth", 3 }, { "SYNO.DownloadStation.Task", 3 }, { "SYNO.DownloadStation.Info", 3 } });
         }
 
         public DownloadStation(Uri url, string username, string password, WebProxy proxy)

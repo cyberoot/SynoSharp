@@ -110,7 +110,10 @@ namespace SynologyAPI
         {
             get
             {
-                return _reqData.Where(k => k.Key != "cgiPath").OrderBy(k => k.Key == "sid" ? -1 : _headBuildOrder.ToList().IndexOf(k.Key)).ToDictionary(k => k.Key == "sid" ? "_sid" : k.Key, v => v.Value);
+                return _reqData
+                    .Where(k => k.Key != "cgiPath")
+                    .OrderBy(k => k.Key == "sid" ? -1 : _headBuildOrder.ToList().IndexOf(k.Key))
+                    .ToDictionary(k => k.Key == "sid" ? "_sid" : k.Key, v => v.Value);
             }
         }
 

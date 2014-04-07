@@ -49,6 +49,10 @@
     <Compile Include="Station.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\StdUtils\StdUtils.csproj">
+      <Project>{c4e83987-6223-46f2-b437-9c677b8a9e2b}</Project>
+      <Name>StdUtils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SynologyRestDAL\SynologyRestDAL.csproj">
       <Project>{893c1997-87ca-49e2-b277-b75607134574}</Project>
       <Name>SynologyRestDAL</Name>

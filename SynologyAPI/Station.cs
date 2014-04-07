@@ -11,6 +11,7 @@ using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using StdUtils;
 using SynologyRestDAL;
 
 namespace SynologyAPI
@@ -170,11 +171,6 @@ namespace SynologyAPI
 
         protected string _postFile(RequestBuilder requestBuilder, string fileName, Stream fileStream, string fileParam = "file")
         {
-            //CreateDownloadTaskFromFile(fileName, requestBuilder);
-            
-            // return null;
-
-            HttpContent fileStreamContent = new StreamContent(fileStream);
             var requestHandler = new HttpClientHandler();
             if (Proxy != null)
             {
@@ -194,24 +190,26 @@ namespace SynologyAPI
                 {
                     foreach (var param in requestBuilder.CallParams)
                     {
-                        var c = new StringContent(param.Key == "version" ? "1" : param.Value);
+                        var c = new StringContent(param.Value);
                         c.Headers.Remove("Content-Type");
-                        formData.Add(c, "\"" + param.Key + "\"");
+                        formData.Add(c, StringUtils.Enquote(param.Key));
                     }
 
-                    // This fucking workzzz!!!
-                    // new MediaTypeHeaderValue("application/octet-stream");
+                    HttpContent fileStreamContent = new StreamContent(fileStream);
+                    fileStreamContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+
+                    // This looks ugly, but won't work otherwise, server api is very sensitive to quotes and stuff
                     fileStreamContent.Headers.Remove("Content-Disposition");
-                    fileStreamContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data") { FileName = "\"" + fileName + "\"", Name = "\"file\"" };
+                    fileStreamContent.Headers.ContentDisposition = 
+                        new ContentDispositionHeaderValue("form-data") { FileName = StringUtils.Enquote(fileName), Name = StringUtils.Enquote("file") };
+
                     fileStreamContent.Headers.Remove("Content-Type");
                     fileStreamContent.Headers.TryAddWithoutValidation("Content-Type", "application/octet-stream");
 
                     formData.Add(fileStreamContent, fileParam, fileName);
 
                     formData.Headers.Remove("Content-Type");
-
                     formData.Headers.TryAddWithoutValidation("Content-Type", "multipart/form-data; boundary=" + boundary);
-
 
                     var response = client.PostAsync(requestUri, formData).Result;
                     if (response.IsSuccessStatusCode)
@@ -225,25 +223,6 @@ namespace SynologyAPI
                 resJson = reader.ReadToEnd();
             }
             return resJson;
-        }
-
-        /// <summary>
-        /// Converts the contents of file into byte buffer.
-        /// </summary>
-        /// <param name="fileName"></param>
-        /// <returns></returns>
-        public static byte[] ConvertFileToByteArray(string fileName)
-        {
-            byte[] returnValue = null;
-
-            using (FileStream fr = new FileStream(fileName, FileMode.Open))
-            {
-                using (BinaryReader br = new BinaryReader(fr))
-                {
-                    returnValue = br.ReadBytes((int)fr.Length);
-                }
-            }
-            return returnValue;
         }
 
     }
