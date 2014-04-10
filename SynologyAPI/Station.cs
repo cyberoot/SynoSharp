@@ -196,7 +196,6 @@ namespace SynologyAPI
                     }
 
                     HttpContent fileStreamContent = new StreamContent(fileStream);
-                    fileStreamContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
 
                     // This looks ugly, but won't work otherwise, server api is very sensitive to quotes and stuff
                     fileStreamContent.Headers.Remove("Content-Disposition");

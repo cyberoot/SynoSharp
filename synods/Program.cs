@@ -34,6 +34,7 @@ namespace synods
 
             NameValueCollection appSettings = ConfigurationManager.AppSettings;
             var ds = new DownloadStation(new Uri(appSettings["host"]), appSettings["username"], appSettings["password"], CreateProxy(appSettings["proxy"]));
+            // todo: this is ugly, needs refactoring
             switch(invokedVerb)
             {
                 case("list"):
@@ -80,19 +81,22 @@ namespace synods
                     if (ds.Login())
                     {
                         TResult<Object> taskResult = null;
+                        var fileName = Path.GetFileName(newOptions.Filename);
+                        var msgResult = String.Empty;
                         if (!String.IsNullOrWhiteSpace(newOptions.Filename))
                         {
-                            taskResult = ds.CreateTask(Path.GetFileName(newOptions.Filename), new FileStream(newOptions.Filename, FileMode.Open, FileAccess.Read, FileShare.Read));
-                            // taskResult = ds.CreateTask(Path.GetFileName(newOptions.Filename), null);
+                            using (var taskFile = new FileStream(newOptions.Filename, FileMode.Open, FileAccess.Read, FileShare.Read))
+                            {
+                                taskResult = ds.CreateTask(fileName, taskFile);
+                            }
+                            msgResult = String.Format("{0} upload", fileName);
                         }
                         if (!String.IsNullOrWhiteSpace(newOptions.Uri))
                         {
                             taskResult = ds.CreateTask(newOptions.Uri);
+                            msgResult = String.Format("Create task to download {0}", newOptions.Uri);
                         }
-                        if (taskResult != null && !taskResult.Success)
-                        {
-                            Console.WriteLine("Failed uploading {0} (((", newOptions.Filename);
-                        }
+                        Console.WriteLine("{0}: {1}", msgResult, taskResult != null && taskResult.Success ? "Ok" : "Failed ");
                         ds.Logout();
                     }
                     break;
