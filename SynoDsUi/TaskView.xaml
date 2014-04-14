@@ -12,6 +12,7 @@
             <RowDefinition Height="5"/>
             <RowDefinition/>
             <RowDefinition Height="18"/>
+            <RowDefinition Height="18"/>
             <RowDefinition Height="20"/>
             <RowDefinition Height="15"/>
             <RowDefinition Height="5"/>
@@ -23,11 +24,12 @@
             <ColumnDefinition Width="5"/>
         </Grid.ColumnDefinitions>
 
-        <Label Grid.Row="1" Grid.Column="1" Content="{Binding Filename}" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" FontSize="14" Margin="0,0,2,0"/>
-        <Label Grid.Row="2" Grid.Column="1" Content="{Binding DownloadedLabel}" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="10" Padding="0" Foreground="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}" Margin="0,0,2,0"/>
-        <Label Grid.Row="4" Grid.Column="1" Content="{Binding SizeLabel}" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="10" Padding="0" Foreground="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}" Margin="0,0,2,0"/>
+        <Label Grid.Row="1" Grid.Column="1" Content="{Binding Filename}" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" FontSize="14" Padding="0" Margin="0,0,2,0"/>
+        <Label Grid.Row="2" Grid.Column="1" Content="{Binding Additional.Detail.Destination}" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="10" Padding="0" Foreground="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}" Margin="0,0,2,0"/>
+        <Label Grid.Row="3" Grid.Column="1" Content="{Binding DownloadedLabel}" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="10" Padding="0" Foreground="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}" Margin="0,0,2,0"/>
+        <Label Grid.Row="5" Grid.Column="1" Content="{Binding SizeLabel}" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="10" Padding="0" Foreground="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}" Margin="0,0,2,0"/>
 
-        <ProgressBar Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Value="{Binding Progress, Mode=OneWay}" Background="{x:Null}">
+        <ProgressBar Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Value="{Binding Progress, Mode=OneWay}" Background="{x:Null}">
             <ProgressBar.Foreground>
                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}"/>
             </ProgressBar.Foreground>
