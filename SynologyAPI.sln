@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StdUtils", "StdUtils\StdUti
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLine", "CommandLine\src\libcmdline\CommandLine.csproj", "{5DEA2811-2FFA-4959-830B-CAD3ACACABEB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SynoDsUi", "SynoDsUi\SynoDsUi.csproj", "{D969921B-9FAB-410C-B24D-8CD0CDA67D47}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{5DEA2811-2FFA-4959-830B-CAD3ACACABEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5DEA2811-2FFA-4959-830B-CAD3ACACABEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5DEA2811-2FFA-4959-830B-CAD3ACACABEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D969921B-9FAB-410C-B24D-8CD0CDA67D47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D969921B-9FAB-410C-B24D-8CD0CDA67D47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D969921B-9FAB-410C-B24D-8CD0CDA67D47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D969921B-9FAB-410C-B24D-8CD0CDA67D47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
