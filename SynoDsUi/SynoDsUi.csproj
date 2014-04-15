@@ -113,6 +113,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\StdUtils\StdUtils.csproj">
+      <Project>{c4e83987-6223-46f2-b437-9c677b8a9e2b}</Project>
+      <Name>StdUtils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SynologyAPI\SynologyAPI.csproj">
       <Project>{2416b308-d8c8-42c4-8d91-8769d2ddb4f7}</Project>
       <Name>SynologyAPI</Name>
