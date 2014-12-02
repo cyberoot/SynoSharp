@@ -124,7 +124,7 @@ namespace SynologyAPI
             request.Append(WebApi());
 
             var reqHead = (from s in _headBuildOrder where _reqData[s] != String.Empty select s + "=" + System.Web.HttpUtility.UrlEncode(_reqData[s])).ToList();
-            var reqParams = _params.Select(param => param.Key + "=" + param.Value).ToList();
+            var reqParams = _params.Select(param => param.Key + "=" + System.Web.HttpUtility.UrlEncode(param.Value)).ToList();
             if (reqHead.Any() || reqParams.Any())
             {
                 request.Append("?");
