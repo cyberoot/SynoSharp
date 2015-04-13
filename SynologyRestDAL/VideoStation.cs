@@ -72,22 +72,6 @@ namespace SynologyRestDAL
         }
 
         [DataContract]
-        public class SingleTaskOperationResult
-        {
-            [DataMember(Name = "error")]
-            public int Error { get; set; }
-
-            [DataMember(Name = "id")]
-            public string Id { get; set; }
-        }
-
-        [DataContract]
-        public class TaskOperationResult : TResult<IEnumerable<SingleTaskOperationResult>>
-        {
-
-        }
-
-        [DataContract]
         public class Library
         {
             [DataMember(Name="id")]

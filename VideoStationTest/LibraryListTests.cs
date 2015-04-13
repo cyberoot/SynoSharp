@@ -47,7 +47,7 @@ namespace VideoStationTest
         {
             get
             {
-                const string host = "http://robinkanters.com:8080", username = "robin", password = "Suusje12", proxy = "";
+                const string host = "http://synologyhost", username = "", password = "", proxy = "";
                 var vs = new VideoStation(new Uri(host), username, password, CreateProxy(proxy));
                 return vs.Login() ? vs : null;
             }

@@ -36,21 +36,6 @@ namespace SynologyAPI
         {
         }
 
-        public VideoStation(Uri url, string username, string password)
-            : base(url, username, password)
-        {
-        }
-
-        public InfoResult Info()
-        {
-            return CallMethod<InfoResult>("SYNO.VideoStation.Info", "getinfo");
-        }
-
-        public ListResult List()
-        {
-            return CallMethod<ListResult>("SYNO.VideoStation.Library", "list");
-        }
-
         public TvshowResult TVShows()
         {
             string additional = @"[""poster_mtime"",""summary"",""watched_ratio"",""file"",""director"",""genre""]";
@@ -71,92 +56,7 @@ namespace SynologyAPI
 
         public ListResult List(string additional, int offset = 0, int limit = -1)
         {
-            return CallMethod<ListResult>("SYNO.VideoStation.Library",
-                "list", new ReqParams
-                    {
-//                        {"additional", additional},
-//                        {"offset", offset.ToString()},
-//                        {"limit", limit.ToString()}
-                    }
-           );
+            return CallMethod<ListResult>("SYNO.VideoStation.Library", "list");
         }
-
-        public TaskOperationResult PauseTasks(string[] taskIds)
-        {
-            return PauseTasks(String.Join(",", taskIds));
-        }
-
-        public TaskOperationResult PauseTasks(string taskIds)
-        {
-            return CallMethod<TaskOperationResult>("SYNO.VideoStation.Task",
-                "pause", new ReqParams
-                {
-                        {"id", taskIds},
-                    }
-            );
-        }
-
-        public TaskOperationResult ResumeTasks(string[] taskIds)
-        {
-            return ResumeTasks(String.Join(",", taskIds));
-        }
-
-        public TaskOperationResult ResumeTasks(string taskIds)
-        {
-            return CallMethod<TaskOperationResult>("SYNO.VideoStation.Task",
-                "resume", new ReqParams
-                {
-                        {"id", taskIds},
-                    }
-            );
-        }
-
-        public TaskOperationResult DeleteTasks(string[] taskIds, bool forceComplete = false)
-        {
-            return DeleteTasks(String.Join(",", taskIds), forceComplete);
-        }
-
-        public TaskOperationResult DeleteTasks(string taskIds, bool forceComplete = false)
-        {
-            return CallMethod<TaskOperationResult>("SYNO.VideoStation.Task",
-                "delete", new ReqParams
-                {
-                        {"id", taskIds},
-                        {"force_complete", forceComplete == null ? "false" : forceComplete.ToString().ToLower()}
-                    }
-            );
-        }
-
-        public ListResult GetTasks(string[] taskIds, string[] additional)
-        {
-            return GetTasks(String.Join(",", taskIds), String.Join(",", additional));
-        }
-
-        public ListResult GetTasks(string taskIds, string additional = "detail")
-        {
-            return CallMethod<ListResult>("SYNO.VideoStation.Task",
-                "getinfo", new ReqParams
-                {
-                        {"id", taskIds},
-                        {"additional", additional}
-                    }
-            );
-        }
-
-        public TResult<Object> CreateTask(string url)
-        {
-            return CallMethod<TResult<Object>>("SYNO.VideoStation.Task",
-                "create", new ReqParams
-                {
-                    {"uri", url}
-                }
-            );
-        }
-
-        public TResult<Object> CreateTask(string fileName, Stream fileStream)
-        {
-            return PostFile<TResult<Object>>("SYNO.VideoStation.Task", "create", fileName, fileStream);
-        }
-
     }
 }
