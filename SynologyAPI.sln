@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 14
+VisualStudioVersion = 14.0.22310.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SynologyAPI", "SynologyAPI\SynologyAPI.csproj", "{2416B308-D8C8-42C4-8D91-8769D2DDB4F7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "synods", "synods\synods.csproj", "{BA45C48B-E3DE-49F7-877A-34D81ABE7464}"
