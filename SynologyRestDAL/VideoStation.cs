@@ -134,7 +134,7 @@ namespace SynologyRestDAL
             [DataMember(Name = "additional")]
             public TvShowAdditional Additional { private get; set; }
 
-            public string Summary => Additional.Summary;
+            public string Summary => Additional.Summary ?? string.Empty;
 
             public override string ToString()
             {
