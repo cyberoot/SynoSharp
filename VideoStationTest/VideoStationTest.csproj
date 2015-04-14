@@ -52,7 +52,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="BaseSynologyTests.cs" />
-    <Compile Include="VideoStationTests\LibraryListTests.cs" />
+    <Compile Include="VideoStationTests\VideoLibraryListTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -36,17 +36,20 @@ namespace SynologyAPI
         {
         }
 
-        public TvshowResult TVShows()
+        public TvshowResult TvShows
         {
-            string additional = @"[""poster_mtime"",""summary"",""watched_ratio"",""file"",""director"",""genre""]";
-            return CallMethod<TvshowResult>("SYNO.VideoStation.TVShow", "list", new ReqParams
+            get
             {
-                {"additional", additional },
-                {"offset", 0.ToString() },
-                {"sort_by", "added" },
-                {"library_id", 0.ToString() },
+                string additional = @"[""poster_mtime"",""summary"",""watched_ratio"",""file"",""director"",""genre""]";
+                return CallMethod<TvshowResult>("SYNO.VideoStation.TVShow", "list", new ReqParams
+                {
+                    {"additional", additional },
+                    {"offset", 0.ToString() },
+                    {"sort_by", "added" },
+                    {"library_id", 0.ToString() },
 
-            });
+                });
+            }
         }
 
         public SynologyRestDAL.Vs.ListResult List(string[] additional, int offset = 0, int limit = -1)
