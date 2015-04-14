@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exception\TvEpisodeRequestException.cs" />
     <Compile Include="VideoStation.cs" />
     <Compile Include="DownloadStation.cs" />
     <Compile Include="JsonHelper.cs" />
