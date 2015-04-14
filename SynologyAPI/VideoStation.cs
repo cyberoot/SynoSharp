@@ -1,34 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Net;
-using SynologyRestDAL;
-using SynologyRestDAL.Ds;
-using System.IO;
+using SynologyAPI.Exception;
 using SynologyRestDAL.Vs;
-
 //using InfoResult = SynologyRestDAL.Vs.InfoResult;
-using ListResult = SynologyRestDAL.Vs.ListResult;
-using TaskOperationResult = SynologyRestDAL.Ds.TaskOperationResult;
 
 namespace SynologyAPI
 {
     public sealed class VideoStation : Station
     {
-        public VideoStation()
-            : base()
-        {}
+        private TvshowResult _tvshowresult;
 
-        protected override Dictionary<string, int> GetImplementedApi()
+        public VideoStation()
         {
-            return _implementedApi ?? (_implementedApi = new Dictionary<string, int>() {
-                { "SYNO.API.Auth", 3 },
-                { "SYNO.VideoStation.TVShow", 2 },
-                { "SYNO.VideoStation.Info", 1 },
-                { "SYNO.VideoStation.Library", 1 }
-            });
         }
 
         public VideoStation(Uri url, string username, string password, WebProxy proxy)
@@ -36,23 +20,57 @@ namespace SynologyAPI
         {
         }
 
-        public TvshowResult TvShows
+        public TvshowResult Shows
         {
-            get
+            get { return _tvshowresult ?? RefreshTvShows(); }
+            set
             {
-                string additional = @"[""poster_mtime"",""summary"",""watched_ratio"",""file"",""director"",""genre""]";
-                return CallMethod<TvshowResult>("SYNO.VideoStation.TVShow", "list", new ReqParams
-                {
-                    {"additional", additional },
-                    {"offset", 0.ToString() },
-                    {"sort_by", "added" },
-                    {"library_id", 0.ToString() },
-
-                });
+                _tvshowresult = value;
+                TvShow.Shows = value.Data.TvShows;
             }
         }
 
-        public SynologyRestDAL.Vs.ListResult List(string[] additional, int offset = 0, int limit = -1)
+        protected override Dictionary<string, int> GetImplementedApi()
+        {
+            return _implementedApi ?? (_implementedApi = new Dictionary<string, int>
+            {
+                {"SYNO.API.Auth", 3},
+                {"SYNO.VideoStation.TVShow", 2},
+                {"SYNO.VideoStation.Info", 1},
+                {"SYNO.VideoStation.TVShowEpisode", 2},
+                {"SYNO.VideoStation.Library", 1}
+            });
+        }
+
+        private TvshowResult RefreshTvShows()
+        {
+            const string additional =
+                @"[""poster_mtime"",""summary"",""watched_ratio"",""file"",""director"",""genre""]";
+            Shows = CallMethod<TvshowResult>("SYNO.VideoStation.TVShow", "list", new ReqParams
+            {
+                {"additional", additional},
+                {"offset", 0.ToString()},
+                {"sort_by", "added"},
+                {"library_id", 0.ToString()}
+            });
+            return Shows;
+        }
+
+        public TvEpisodesInfo FindEpisodes(TvShow show)
+        {
+            const string additional = @"[""summary"",""collection"",""poster_mtime"",""watched_ratio""]";
+            var tvEpisodesResult = CallMethod<TvEpisodesResult>("SYNO.VideoStation.TVShowEpisode", "list", new ReqParams
+            {
+                {"additional", additional},
+                {"tvshow_id", show.Id.ToString()},
+                {"library_id", 0.ToString()}
+            });
+            if (!tvEpisodesResult.Success)
+                throw new TvEpisodeRequestException(@"Synology error code " + tvEpisodesResult.Error);
+            return tvEpisodesResult.Data;
+        }
+
+        public ListResult List(string[] additional, int offset = 0, int limit = -1)
         {
             return List(String.Join(",", additional), offset, limit);
         }
