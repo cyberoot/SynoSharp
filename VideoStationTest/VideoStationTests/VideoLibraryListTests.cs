@@ -27,7 +27,7 @@ namespace SynologyApiTest.VideoStationTests
         [TestMethod]
         public void CanListVideosInLibrary()
         {
-            var result = VideoStation.TvShows;
+            var result = VideoStation.Shows;
             var tvShowsList = result.Data.TvShows.ToList();
 
             var longest = tvShowsList.OrderByDescending(t => t.Title.Length).First().Title.Length;
@@ -45,7 +45,7 @@ namespace SynologyApiTest.VideoStationTests
         [TestMethod]
         public void TvShowList_ListContainsShows()
         {
-            var result = VideoStation.TvShows.Data.TvShows.ToArray();
+            var result = VideoStation.Shows.Data.TvShows.ToArray();
 
             Assert.IsTrue(result.Length > 0);
         }
@@ -53,7 +53,7 @@ namespace SynologyApiTest.VideoStationTests
         [TestMethod]
         public void TvShowList_ShowsHaveTitles()
         {
-            var result = VideoStation.TvShows.Data.TvShows;
+            var result = VideoStation.Shows.Data.TvShows;
 
             Assert.IsNotNull(result.First().Title);
         }
@@ -61,7 +61,7 @@ namespace SynologyApiTest.VideoStationTests
         [TestMethod]
         public void TvShowList_ShowsHaveIds()
         {
-            var result = VideoStation.TvShows.Data.TvShows;
+            var result = VideoStation.Shows.Data.TvShows;
 
             Assert.IsNotNull(result.First().Id);
         }
@@ -69,7 +69,7 @@ namespace SynologyApiTest.VideoStationTests
         [TestMethod]
         public void TvShowList_ShouldBeAbleToSort()
         {
-            var result = VideoStation.TvShows.Data.TvShows.ToList();
+            var result = VideoStation.Shows.Data.TvShows.ToList();
 
             Assert.IsNotNull(result);
 
@@ -80,6 +80,39 @@ namespace SynologyApiTest.VideoStationTests
 
             Assert.IsFalse(resultOrdered.SequenceEqual(result));
             Assert.IsFalse(resultOrderedDesc.SequenceEqual(result));
+        }
+
+        [TestMethod]
+        public void TvShowEpisode_ShouldListEpisodesForSeries()
+        {
+            var show = VideoStation.Shows.Data.TvShows.First();
+
+            var tvEpisodes = VideoStation.FindEpisodes(show).Episodes;
+
+            Assert.IsNotNull(tvEpisodes);
+        }
+
+        [TestMethod]
+        public void TvShowEpisode_EpisodeShouldHaveTitle()
+        {
+            var show = VideoStation.Shows.Data.TvShows.First();
+
+            var episode = VideoStation.FindEpisodes(show).Episodes.First();
+
+            Debug.WriteLine(episode.ToString());
+        }
+
+        [TestMethod]
+        public void TvShowEpisode_ShouldHaveShowInformation()
+        {
+            var show = VideoStation.Shows.Data.TvShows.First();
+
+            var episode = VideoStation.FindEpisodes(show).Episodes.First(e => e.Summary != null);
+
+            Debug.WriteLine(show.ToString());
+            Debug.WriteLine(episode.ToString());
+
+            Assert.AreEqual(show, episode.Show);
         }
     }
 }
