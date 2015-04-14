@@ -107,12 +107,42 @@ namespace SynologyApiTest.VideoStationTests
         {
             var show = VideoStation.Shows.Data.TvShows.First();
 
-            var episode = VideoStation.FindEpisodes(show).Episodes.First(e => e.Summary != null);
+            var episode = VideoStation.FindEpisodes(show).Episodes.First(e => e.Summary.Length > 0);
 
             Debug.WriteLine(show.ToString());
             Debug.WriteLine(episode.ToString());
 
             Assert.AreEqual(show, episode.Show);
+
+            Assert.IsNotNull(episode.Summary);
+            Assert.IsNotNull(episode.Tagline);
+        }
+
+        [TestMethod]
+        public void TvShowEpisode_CanListEpisodesForShow()
+        {
+            var data = VideoStation.Shows;
+            var show = data.Data.TvShows.First(s => s.Title.Contains(@"Mother"));
+
+            var episodes = VideoStation.FindEpisodes(show).Episodes.ToList();
+            var longestEpisodeLength = episodes.OrderByDescending(s => s.Tagline.Length).First().Tagline.Length;
+
+            foreach (var episode in episodes)
+            {
+                var summary = string.Empty;
+                if (episode.Summary != null)
+                    summary = episode.Summary?.Length > 40 ? episode.Summary.Substring(0, 40) : episode.Summary;
+
+                Debug.WriteLine("#{0} | S{3}E{4} {1} {5}| {2}",
+                    episode.Id,
+                    episode.Tagline,
+                    summary,
+                    episode.Season < 10 ? "0" + episode.Season : episode.Season.ToString(),
+                    episode.Episode < 10 ? "0" + episode.Episode : episode.Episode.ToString(),
+                    new string(' ', longestEpisodeLength - episode.Tagline.Length));
+            }
+
+            Assert.IsTrue(data.Success);
         }
     }
 }
