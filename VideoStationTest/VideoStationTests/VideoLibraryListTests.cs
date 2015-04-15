@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SynologyAPI;
+using SynologyAPI.Exception;
+using SynologyRestDAL.Vs;
 
 namespace SynologyApiTest.VideoStationTests
 {
@@ -143,6 +147,13 @@ namespace SynologyApiTest.VideoStationTests
             }
 
             Assert.IsTrue(data.Success);
+        }
+
+        [TestMethod]
+        [ExpectedException(exceptionType: typeof(InvalidDataException))]
+        public void TvShowEpisode_ShouldGetExceptionIfSearchingEpisodesForNullShow()
+        {
+            var tvEpisodes = VideoStation.FindEpisodes(null).Episodes;
         }
     }
 }

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using SynologyAPI.Exception;
 using SynologyRestDAL.Vs;
-//using InfoResult = SynologyRestDAL.Vs.InfoResult;
 
 namespace SynologyAPI
 {
@@ -58,6 +58,7 @@ namespace SynologyAPI
 
         public TvEpisodesInfo FindEpisodes(TvShow show)
         {
+            if(show == null) throw new InvalidDataException("Show cannot be null");
             const string additional = @"[""summary"",""collection"",""poster_mtime"",""watched_ratio""]";
             var tvEpisodesResult = CallMethod<TvEpisodesResult>("SYNO.VideoStation.TVShowEpisode", "list", new ReqParams
             {
