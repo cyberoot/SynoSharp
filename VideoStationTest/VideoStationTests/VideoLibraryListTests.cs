@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SynologyAPI;
-using SynologyAPI.Exception;
-using SynologyRestDAL.Vs;
-
-namespace SynologyApiTest.VideoStationTests
+﻿namespace SynologyApiTest.VideoStationTests
 {
-    [TestClass]
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Linq;
+    using SynologyAPI;
+    using SynologyAPI.Exception;
+    using SynologyRestDAL.Vs;
+    using NUnit.Framework;
+
+    [TestFixture]
     public class VideoLibraryListTests : BaseSynologyTests
     {
         private VideoStation VideoStation
@@ -22,13 +22,13 @@ namespace SynologyApiTest.VideoStationTests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void CanCreateVideoStationSession()
         {
             Assert.IsNotNull(VideoStation);
         }
 
-        [TestMethod]
+        [Test]
         public void CanListVideosInLibrary()
         {
             var result = VideoStation.Shows;
@@ -46,7 +46,7 @@ namespace SynologyApiTest.VideoStationTests
             Assert.IsTrue(result.Success);
         }
 
-        [TestMethod]
+        [Test]
         public void TvShowList_ListContainsShows()
         {
             var result = VideoStation.Shows.Data.TvShows.ToArray();
@@ -54,7 +54,7 @@ namespace SynologyApiTest.VideoStationTests
             Assert.IsTrue(result.Length > 0);
         }
 
-        [TestMethod]
+        [Test]
         public void TvShowList_ShowsHaveTitles()
         {
             var result = VideoStation.Shows.Data.TvShows;
@@ -62,7 +62,7 @@ namespace SynologyApiTest.VideoStationTests
             Assert.IsNotNull(result.First().Title);
         }
 
-        [TestMethod]
+        [Test]
         public void TvShowList_ShowsHaveIds()
         {
             var result = VideoStation.Shows.Data.TvShows;
@@ -70,7 +70,7 @@ namespace SynologyApiTest.VideoStationTests
             Assert.IsNotNull(result.First().Id);
         }
 
-        [TestMethod]
+        [Test]
         public void TvShowList_ShouldBeAbleToSort()
         {
             var result = VideoStation.Shows.Data.TvShows.ToList();
@@ -86,7 +86,7 @@ namespace SynologyApiTest.VideoStationTests
             Assert.IsFalse(resultOrderedDesc.SequenceEqual(result));
         }
 
-        [TestMethod]
+        [Test]
         public void TvShowEpisode_ShouldListEpisodesForSeries()
         {
             var show = VideoStation.Shows.Data.TvShows.First();
@@ -96,7 +96,7 @@ namespace SynologyApiTest.VideoStationTests
             Assert.IsNotNull(tvEpisodes);
         }
 
-        [TestMethod]
+        [Test]
         public void TvShowEpisode_EpisodeShouldHaveTitle()
         {
             var show = VideoStation.Shows.Data.TvShows.First();
@@ -106,7 +106,7 @@ namespace SynologyApiTest.VideoStationTests
             Debug.WriteLine(episode.ToString());
         }
 
-        [TestMethod]
+        [Test]
         public void TvShowEpisode_ShouldHaveShowInformation()
         {
             var show = VideoStation.Shows.Data.TvShows.First();
@@ -122,7 +122,7 @@ namespace SynologyApiTest.VideoStationTests
             Assert.IsNotNull(episode.Tagline);
         }
 
-        [TestMethod]
+        [Test]
         public void TvShowEpisode_CanListEpisodesForShow()
         {
             var data = VideoStation.Shows;
@@ -135,7 +135,7 @@ namespace SynologyApiTest.VideoStationTests
             {
                 var summary = string.Empty;
                 if (episode.Summary != null)
-                    summary = episode.Summary?.Length > 40 ? episode.Summary.Substring(0, 40) : episode.Summary;
+                    summary = episode.Summary.Length > 40 ? episode.Summary.Substring(0, 40) : episode.Summary;
 
                 Debug.WriteLine("#{0} | S{3}E{4} {1} {5}| {2}",
                     episode.Id,
@@ -149,7 +149,7 @@ namespace SynologyApiTest.VideoStationTests
             Assert.IsTrue(data.Success);
         }
 
-        [TestMethod]
+        [Test]
         [ExpectedException(exceptionType: typeof(InvalidDataException))]
         public void TvShowEpisode_ShouldGetExceptionIfSearchingEpisodesForNullShow()
         {

@@ -5,12 +5,13 @@ using System.Net;
 
 namespace SynologyApiTest
 {
+    using NUnit.Framework;
     public abstract class BaseSynologyTests
     {
-        public string Host => GetAppSetting("host");
-        public string Username => GetAppSetting("username");
-        public string Password => GetAppSetting("password");
-        public string Proxy => GetAppSetting("proxy");
+        public string Host { get { return GetAppSetting("host"); } }
+        public string Username { get { return GetAppSetting("username"); } }
+        public string Password { get { return GetAppSetting("password"); } }
+        public string Proxy { get { return GetAppSetting("proxy"); } }
 
         protected static WebProxy CreateProxy(string proxyUrl)
         {
