@@ -55,7 +55,6 @@
   </Choose>
   <ItemGroup>
     <Compile Include="BaseSynologyTests.cs" />
-    <Compile Include="TextFixture.cs" />
     <Compile Include="VideoStationTests\VideoLibraryListTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
