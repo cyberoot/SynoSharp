@@ -13,14 +13,17 @@
     [TestFixture]
     public class VideoLibraryListTests : BaseSynologyTests
     {
-        private VideoStation VideoStation
+        [SetUp]
+        [Test]
+        public void Setup()
         {
-            get
-            {
-                var vs = new VideoStation(new Uri(Host), Username, Password, CreateProxy(Proxy));
-                return vs.Login() ? vs : null;
-            }
+            var vs = new VideoStation(new Uri(Host), Username, Password, CreateProxy(Proxy));
+            VideoStation = vs.Login() ? vs : null;
+
+            Assert.IsNotNull(VideoStation);
         }
+
+        private VideoStation VideoStation { get; set; }
 
         [Test]
         public void CanCreateVideoStationSession()
