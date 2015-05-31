@@ -1,4 +1,6 @@
-﻿namespace SynologyApiTest.VideoStationTests
+﻿using System.Diagnostics;
+
+namespace SynologyApiTest.VideoStationTests
 {
     using System;
     using System.IO;
