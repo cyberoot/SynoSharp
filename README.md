@@ -2,6 +2,8 @@
 
 C# Implementation of official Synology Web API
 
+[![Build Status](https://travis-ci.org/robinkanters/SynoSharp.svg?branch=master)](https://travis-ci.org/robinkanters/SynoSharp)
+
 ## Synology API
 
 ### Download Station
