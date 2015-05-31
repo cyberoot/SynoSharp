@@ -1,0 +1,8 @@
+language: csharp
+solution: SynologyAPI.sln
+mono:
+- latest
+before_install:
+- git submodule update --init --recursive
+script:
+- xbuild /p:Configuration=Release SynologyAPI.sln
